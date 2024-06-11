@@ -34,7 +34,7 @@ COPY wait-for-it.sh /wait-for-it.sh
 RUN chmod +x /wait-for-it.sh
 
 # Configure healthcheck
-HEALTHCHECK --interval=5m --timeout=3s CMD wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
+HEALTHCHECK --interval=5m --timeout=3s CMD wget --no-verbose --tries=1 --spider http://localhost:3000/ || exit 1
 
 # Set the entry point for the container
 ENTRYPOINT ["dotnet", "UmbracoContainer.dll"]
