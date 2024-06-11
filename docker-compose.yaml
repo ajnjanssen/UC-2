@@ -1,20 +1,22 @@
-version: "3.2"
+version: '3.8'
+
 services:
-  admin:
-    container_name: umbraco_admin
-    hostname: umbraco_admin
-    image: umbraco
+  umbraco:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: umbraco_container
     ports:
-      - "8000:8000"
-    networks:
-      - webnet
+      - "8080:80"  # Map port 80 in the container to port 8080 on the host
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost/ || exit 1"]
+      interval: 5m
+      timeout: 3s
+      retries: 3
+      start_period: 2m
     environment:
-      Umbraco_IsMaster: "true"
-      Umbraco_ApplicationUrl: "umbraco-admin"
+      - ASPNETCORE_ENVIRONMENT=Production
 
-networks:
-  webnet:
-
-volumes:
-  umbraco_data:
-    external: true
+# Optional volumes for persistence, add as needed
+# volumes:
+#   - ./data:/app/data
