@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: umbraco_container
     ports:
-      - "8080:80"  # Map port 80 in the container to port 8080 on the host
+      - "8081:80"  # Change the host port to 8081
     healthcheck:
       test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost/ || exit 1"]
       interval: 5m
