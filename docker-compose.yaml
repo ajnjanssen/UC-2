@@ -1,32 +1,13 @@
-version: '3'
+version: '3.8'
 
 services:
-  umbraco-db:
-    container_name: umbraco-db-mssql-2017
-    image: mcr.microsoft.com/mssql/server:2017-latest
-    env_file: ./configs/ms.sql.env
-    networks:
-      - umbraco-network
-    volumes:
-      - umbraco.db:/var/opt/mssql/data
-    restart: always
-    ports:
-      - '3930:1433'
-      - '3931:1434'
-  
-  umbraco-netcore:
-    restart: always
-    links:
-      - umbraco-db:umbraco-db
-    depends_on:
-      - umbraco-db
+  umbraco:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: umbraco_container
     ports:
-      - "8081:80"  # Changed the host port to 8081
-    networks:
-      - umbraco-network
+      - "8081:80"  # Change the host port to 8081
     healthcheck:
       test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost/ || exit 1"]
       interval: 5m
@@ -36,8 +17,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
 
-volumes:
-  umbraco.db:
-
-networks:
-  umbraco-network: null
+# Optional volumes for persistence, add as needed
+# volumes:
+#   - ./data:/app/data
